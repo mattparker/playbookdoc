@@ -12,6 +12,8 @@ require_once __DIR__ . '/../AnsibleDoc/DocBlock.php';
 class ParserTest extends PHPUnit_Framework_TestCase {
 
 
+
+
     public function test_no_docblocks_returns_nothing () {
         $test = <<<BLOCK
 # just a comment
@@ -22,6 +24,8 @@ BLOCK;
 
         $this->assertEquals(0, count($blocks));
     }
+
+
 
     public function test_we_can_parse_a_single_simple_docblock () {
 
@@ -41,6 +45,8 @@ BLOCK;
         $this->assertEquals('Main description', $block0->getShortDescription());
     }
 
+
+
     public function test_we_can_extract_two_docblocks () {
 
         $test = <<<BLOCK
@@ -59,6 +65,8 @@ BLOCK;
 
         $this->assertEquals(2, count($blocks));
     }
+
+
 
     public function test_we_can_parse_a_second_simple_docblock () {
 

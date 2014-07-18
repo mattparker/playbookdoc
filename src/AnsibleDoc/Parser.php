@@ -12,6 +12,13 @@ namespace AnsibleDoc;
 class Parser {
 
 
+    /**
+     * Parses text string for docblocks and extracts the relevant info
+     *
+     * @param $text
+     *
+     * @return DocBlock[]
+     */
     public function parse ($text) {
 
         $docblocks = $this->extractDocBlocks($text);
@@ -25,6 +32,14 @@ class Parser {
 
     }
 
+
+    /**
+     * Finds docblocks
+     *
+     * @param $text
+     *
+     * @return DocBlock[]
+     */
     protected function extractDocBlocks ($text) {
 
         $lines = explode(PHP_EOL, $text);
@@ -57,12 +72,23 @@ class Parser {
     }
 
 
-
+    /**
+     * Takes the text lines found in the block and parses it into
+     * a AnsibleDoc\DocBlock
+     * @param array $textlines
+     *
+     * @return DocBlock
+     */
     protected function parseBlock (array $textlines = array()) {
 
         require_once __DIR__ . '/DocBlock.php';
         $doc = new DocBlock();
 
+        foreach ($textlines as $line) {
+
+            $doc->parseLine($line);
+
+        }
 
 
         return $doc;
