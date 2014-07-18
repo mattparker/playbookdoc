@@ -15,7 +15,6 @@ namespace AnsibleDoc;
 class DocBlock {
 
 
-
     /**
      * @var array
      */
@@ -23,7 +22,13 @@ class DocBlock {
         'tags' => []
     );
 
-    protected $lastTagSet;
+
+    /**
+     * The last tag (name) set, if any
+     *
+     * @var string
+     */
+    protected $lastTagSet = null;
 
 
     /**
@@ -43,28 +48,32 @@ class DocBlock {
         if (substr($text, 0, 1) === '@') {
 
             $this->setTag($text);
+            return;
 
-        } else {
-
-            if ($this->lastTagSet !== null) {
-
-                $this->appendToLastTagSet($text);
-
-            } else if ($text != '' && !$this->hasShortDescription()) {
-
-                $this->values['short_description'] = $text;
-                $this->lastTagSet = null;
-
-            } else {
-
-                if (!$this->hasLongDescription()) {
-                    $this->values['long_description'] = $text;
-                } else {
-                    $this->values['long_description'] .= PHP_EOL . $text;
-                }
-                $this->lastTagSet = null;
-            }
         }
+
+
+        if ($this->lastTagSet !== null) {
+
+            $this->appendToLastTagSet($text);
+            return;
+
+        }
+
+
+        if ($text != '' && !$this->hasShortDescription()) {
+
+            $this->values['short_description'] = $text;
+            $this->lastTagSet = null;
+            return;
+
+        }
+
+
+        $this->setLongDescription($text);
+        $this->lastTagSet = null;
+
+
     }
 
 
@@ -87,7 +96,7 @@ class DocBlock {
     public function getLongDescription () {
 
         if ($this->hasLongDescription()) {
-            return $this->values['long_description'];
+            return trim($this->values['long_description']);
         }
         return '';
 
@@ -134,10 +143,13 @@ class DocBlock {
      */
     protected function appendToLastTagSet ($text) {
 
-        $numvals = count($this->values['tags'][$this->lastTagSet]);
-        $this->values['tags'][$this->lastTagSet][$numvals - 1] .= PHP_EOL . $text;
+        $lastTag =& $this->values['tags'][$this->lastTagSet];
+        $numvals = count($lastTag);
+        $lastTag[$numvals - 1] .= PHP_EOL . $text;
+        $lastTag[$numvals - 1] = trim($lastTag[$numvals - 1]);
 
     }
+
 
     /**
      * @return bool
@@ -146,12 +158,14 @@ class DocBlock {
         return array_key_exists('short_description', $this->values);
     }
 
+
     /**
      * @return bool
      */
     public function hasLongDescription () {
         return array_key_exists('long_description', $this->values);
     }
+
 
     /**
      * @param $tagname
@@ -160,6 +174,24 @@ class DocBlock {
      */
     public function hasTag ($tagname) {
         return array_key_exists($tagname, $this->values['tags']);
+    }
+
+
+    /**
+     * Sets or appends, depending on whether there's something there already.
+     *
+     * @param $text
+     */
+    protected function setLongDescription ($text) {
+
+        if (!$this->hasLongDescription()) {
+            if ($text !== '') {
+                $this->values['long_description'] = $text;
+            }
+        } else {
+            $this->values['long_description'] .= PHP_EOL . $text;
+        }
+
     }
 
 }
