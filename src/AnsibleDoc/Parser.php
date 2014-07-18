@@ -28,12 +28,43 @@ class Parser {
     protected function extractDocBlocks ($text) {
 
         $lines = explode(PHP_EOL, $text);
-        return [1];
+        $ret = [];
+
+        $blockStarted = false;
+        $block = [];
+
+        foreach ($lines as $line) {
+
+            $line = trim($line);
+
+            if (substr($line, 0, 3) === '###') {
+
+                if ($blockStarted) {
+                    $ret[] = $block;
+                    $blockStarted = false;
+                } else {
+                    $blockStarted = true;
+                    $block = [];
+                }
+
+            } else if ($blockStarted) {
+                // exclude the initial #
+                $block[] = substr($line, 1);
+            }
+        }
+
+        return $ret;
     }
 
-    protected function parseBlock ($text) {
+
+
+    protected function parseBlock (array $textlines = array()) {
 
         require_once __DIR__ . '/DocBlock.php';
-        return new DocBlock();
+        $doc = new DocBlock();
+
+
+
+        return $doc;
     }
 } 
