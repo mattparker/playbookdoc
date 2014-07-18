@@ -46,18 +46,18 @@ class DocBlock {
 
         } else {
 
-            if ($text != '' && $this->lastTagSet !== null) {
+            if ($this->lastTagSet !== null) {
 
                 $this->appendToLastTagSet($text);
 
-            } else if ($text != '' && !array_key_exists('short_description', $this->values)) {
+            } else if ($text != '' && !$this->hasShortDescription()) {
 
                 $this->values['short_description'] = $text;
                 $this->lastTagSet = null;
 
             } else {
 
-                if (!array_key_exists('long_description', $this->values)) {
+                if (!$this->hasLongDescription()) {
                     $this->values['long_description'] = $text;
                 } else {
                     $this->values['long_description'] .= PHP_EOL . $text;
@@ -73,7 +73,7 @@ class DocBlock {
      */
     public function getShortDescription () {
 
-        if (array_key_exists('short_description', $this->values)) {
+        if ($this->hasShortDescription()) {
             return $this->values['short_description'];
         }
         return '';
@@ -86,7 +86,7 @@ class DocBlock {
      */
     public function getLongDescription () {
 
-        if (array_key_exists('long_description', $this->values)) {
+        if ($this->hasLongDescription()) {
             return $this->values['long_description'];
         }
         return '';
@@ -95,13 +95,13 @@ class DocBlock {
 
 
     /**
-     * @param $tagname
+     * @param string $tagname
      *
      * @return array
      */
     public function getTag ($tagname) {
 
-        if (array_key_exists($tagname, $this->values['tags'])) {
+        if ($this->hasTag($tagname)) {
             return $this->values['tags'][$tagname];
         }
         return [];
@@ -109,7 +109,7 @@ class DocBlock {
 
 
     /**
-     * @param $text
+     * @param string $text
      */
     protected function setTag ($text) {
 
@@ -117,7 +117,7 @@ class DocBlock {
         $tagname = trim(substr($text, 1, $space));
         $tagvalue = trim(substr($text, $space));
 
-        if (!array_key_exists($tagname, $this->values['tags'])) {
+        if (!$this->hasTag($tagname)) {
             $this->values['tags'][$tagname] = [];
         }
 
@@ -130,13 +130,36 @@ class DocBlock {
 
     /**
      * Allows for multi-line tags
-     * @param $text
+     * @param string $text
      */
     protected function appendToLastTagSet ($text) {
 
         $numvals = count($this->values['tags'][$this->lastTagSet]);
         $this->values['tags'][$this->lastTagSet][$numvals - 1] .= PHP_EOL . $text;
 
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasShortDescription () {
+        return array_key_exists('short_description', $this->values);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLongDescription () {
+        return array_key_exists('long_description', $this->values);
+    }
+
+    /**
+     * @param $tagname
+     *
+     * @return bool
+     */
+    public function hasTag ($tagname) {
+        return array_key_exists($tagname, $this->values['tags']);
     }
 
 }
