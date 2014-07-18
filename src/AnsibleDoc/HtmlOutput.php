@@ -34,9 +34,32 @@ class HtmlOutput {
      * @var string
      */
     protected $template = <<<TEMPLATE
- <html><head><title>Ansible Docs: {filename}</title></head>
- <body><h1>{filename}</h1>
- {content}
+ <html><head><title>Ansible Docs: {filename}</title>
+ <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+ <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
+ <style type="text/css">.main {margin-left:1em;}
+ h1 {font-size: 150%; background-color: #3355BA; color: #FFF; margin: 0; padding: 1em;}
+ .block {font-size:90%; margin: 2em 0.3em 1em 3em;} .block-1{font-size: 100%; margin-left: 1em;}
+ .contents {background-color: #eee7dd;color: #14100a; padding: 1px 0 0 0.6em;}
+ a, a:link {color:#b59569;}
+ dl {margin-top: 1em; padding-bottom: 1em;border-bottom: 1px solid #b59569;}
+ dd {}
+ dt {font-family: monospace;}
+ </style>
+ </head>
+ <body>
+ <div class="pure-g">
+     <div class="pure-u-1 pure-u-md-3-4">
+     <div class="main">
+     <h1>{filename}</h1>
+     {content}
+     </div>
+     </div>
+     <div class=" pure-u-1 pure-u-md-1-4">
+      <div class="contents">
+      <h2>Contents</h2>{content_listing}</div>
+     </div>
+ </div>
  </body></html>
 TEMPLATE;
 
@@ -65,6 +88,10 @@ BLOCKTEMPLATE;
 TAGTEMPLATE;
 
 
+    protected $local_vars;
+    protected $local_plays;
+    protected $local_roles;
+
     /**
      * @param string $directory Where to write docs to
      */
@@ -88,13 +115,16 @@ TAGTEMPLATE;
      */
     public function write () {
 
+        $contents = $this->prepareContents();
+
+
         foreach ($this->parsedFiles as $filename => $docblocks) {
 
             $content = $this->writeContent($docblocks);
 
             $template = str_replace(
-                ['{filename}', '{content}'],
-                [$filename, $content],
+                ['{filename}', '{content}', '{content_listing}'],
+                [$filename, $content, $contents],
                 $this->template
             );
 
@@ -102,6 +132,74 @@ TAGTEMPLATE;
             $saveFile = $this->convertFilenameToDocFilename($filename);
             file_put_contents($this->dir . DIRECTORY_SEPARATOR . $saveFile, $template);
         }
+    }
+
+
+
+    protected function prepareContents () {
+
+        $roles = [];
+        $plays = [];
+        $vars = [];
+
+        foreach ($this->parsedFiles as $filename => $docblocks) {
+
+            if (preg_match('/^\/roles\/([^\/]+)\//', $filename, $matches)) {
+                // This is a role
+                // looking for starts with "/roles/.../more" - where ... is what we want
+                $roles[$matches[1]][] = $filename;
+
+            } else if (preg_match('/^\/([^\/]+).yml$/', $filename, $matches)) {
+
+                // This is a play
+                // looking for 'not a forward slash' followed by .yml
+                $plays[] = $matches[1];
+
+            } else if (preg_match('/^\/((host_|group_)vars)/', $filename, $matches)) {
+
+                // This is a vars
+                // looking for host_vars or group_vars
+                $vars[$matches[1]][] = $filename;
+            }
+
+        }
+
+
+        $ret = '';
+
+        $ret = '<div class="plays"><h4>Plays</h4><ul>';
+        foreach ($plays as $playname) {
+            $ret .= '<li>' . $this->link($playname, $this->convertFilenameToDocFilename('/' . $playname . '.yml'));
+        }
+        $ret .= '</ul></div>';
+
+        $ret .= '<div class="roles"><h4>Roles</h4><ul>';
+        foreach ($roles as $role_name => $filenames) {
+            $ret .= '<li><h5>' . $role_name . '</h5><ul>';
+            foreach ($filenames as $filename) {
+                $ret .= '<li>' . $this->link(
+                        str_replace('/roles/' . $role_name . '/', '', $filename),
+                        $this->convertFilenameToDocFilename($filename)) . '</li>';
+            }
+            $ret .= '</ul>';
+        }
+        $ret .= '</ul></div>';
+
+        $ret .= '<div class="vars"><h4>Variables</h4><ul>';
+        foreach ($vars as $var_type => $var_files) {
+            $ret .= '<li><h5>' . $var_type . '</h5><ul>';
+            foreach ($var_files as $filename) {
+                $ret .= '<li>' . $this->link(
+                        str_replace('/' . $var_type . '/', '', $filename),
+                        $this->convertFilenameToDocFilename($filename)) . '</li>';
+            }
+            $ret .= '</ul>';
+        }
+        $ret .= '</ul></div>';
+
+
+        return $ret;
+
     }
 
 
