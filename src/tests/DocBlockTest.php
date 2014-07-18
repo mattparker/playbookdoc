@@ -84,6 +84,18 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(['Matt' . PHP_EOL . $text2], $doc->getTag('author'));
     }
 
+    public function test_we_can_get_tags_used () {
+        $doc = new AnsibleDoc\DocBlock();
+        $text = '@author Matt';
+        $doc->parseLine($text);
+        $text = '@author Jen';
+        $doc->parseLine($text);
+        $text = '@copyright Me';
+        $doc->parseLine($text);
+
+        $this->assertEquals(['author', 'copyright'], $doc->getTagsUsed());
+    }
+
 
 }
  

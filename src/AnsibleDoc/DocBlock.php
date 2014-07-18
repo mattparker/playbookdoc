@@ -118,6 +118,14 @@ class DocBlock {
 
 
     /**
+     * @return array
+     */
+    public function getTagsUsed () {
+        return array_keys($this->values['tags']);
+    }
+
+
+    /**
      * @param string $text
      */
     protected function setTag ($text) {
