@@ -1,8 +1,13 @@
 <?php
 /**
- * User: matt
- * Date: 18/07/14
- * Time: 12:32
+ *
+ * Documentation tool for Ansible playbooks and related files.
+ *
+ * @copyright Matt Parker, Lamplight Database Systems Limited 2014
+ * @license BSD
+ * @version 0.1
+ * @link https://github.com/mattparker/ansibledoc
+ *
  */
 
 namespace AnsibleDoc;
@@ -10,6 +15,9 @@ namespace AnsibleDoc;
 
 /**
  * Class DocBlock
+ *
+ * Represents a single docblock found in a file
+ *
  * @package AnsibleDoc
  */
 class DocBlock {

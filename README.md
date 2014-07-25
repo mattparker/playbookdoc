@@ -13,18 +13,22 @@ This is a very first version...
 
 ## Usage
 
-To get it you'll need to clone this repo somewhere.  Then, from within the directory where your playbooks and stuff
-are, create a docs/ directory, and then you can run
+To get it you'll need to clone this repo somewhere.  You'll also need php 5.4+ on your system, but there are no
+other dependencies (unless you want to run the unit tests, you'll need phpunit).  I know python would
+be more appropriate but I've not got the time right now.
+
+Then, from within the directory where your playbooks and stuff are, create a docs/ directory, and then you can run
 
 ```bash
 
 $ /path/to/ansibledocrepo/ansibledoc.php
-
 ```
 
-and it'll put a bunch of html files there.
+and it'll put a bunch of html files there.  You can specify input directory using the `-i` option and the output
+directory with the `-o` option.
 
-However, you'll need some docblocks in your playbooks (and anything else that's a yaml file, at any depth).
+However, you'll need some docblocks in your playbooks (and anything else that's a yaml file, at any depth), else
+the output won't be very exciting.
 
 
 ## Docblocks
@@ -74,7 +78,11 @@ You'll need to write docblocks that look like this for them to be picked up:
 #
 ###
 
+# (more playbook)
+
 ```
+
+You can add docblocks to all kinds of .yaml files (i.e. vars, tasks, handlers etc).
 
 As far as I know there's no existing yaml docblock convention or style, but if you know of one that's different to
 this do let me know.

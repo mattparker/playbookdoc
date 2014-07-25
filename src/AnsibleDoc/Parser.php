@@ -1,19 +1,44 @@
 <?php
 /**
- * User: matt
- * Date: 18/07/14
- * Time: 12:16
+ *
+ * Documentation tool for Ansible playbooks and related files.
+ *
+ * @copyright Matt Parker, Lamplight Database Systems Limited 2014
+ * @license BSD
+ * @version 0.1
+ * @link https://github.com/mattparker/ansibledoc
+ *
  */
 
 
 namespace AnsibleDoc;
 
 
+/**
+ * Class Parser
+ *
+ * Parses text for docblocks in yml files.
+ *
+ * @package AnsibleDoc
+ */
 class Parser {
 
 
     /**
      * Parses text string for docblocks and extracts the relevant info
+     *
+     * Docblocks should start with three consecutive hash symbols (###),
+     * each subsequent line should start with a has symbol (#),
+     * and the docblock should be closed with three consecutive hash symbols (###).
+     *
+     * For example:
+
+     ###
+     #
+     # This is a simple yaml style docblock
+     #
+     ###
+
      *
      * @param $text
      *
