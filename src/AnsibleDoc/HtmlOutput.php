@@ -135,7 +135,11 @@ TAGTEMPLATE;
     }
 
 
-
+    /**
+     * Makes the contents page
+     *
+     * @return string
+     */
     protected function prepareContents () {
 
         $roles = [];
@@ -165,37 +169,12 @@ TAGTEMPLATE;
         }
 
 
-        $ret = '';
 
-        $ret = '<div class="plays"><h4>Plays</h4><ul>';
-        foreach ($plays as $playname) {
-            $ret .= '<li>' . $this->link($playname, $this->convertFilenameToDocFilename('/' . $playname . '.yml'));
-        }
-        $ret .= '</ul></div>';
+        $ret = $this->renderContentsPlays($plays);
 
-        $ret .= '<div class="roles"><h4>Roles</h4><ul>';
-        foreach ($roles as $role_name => $filenames) {
-            $ret .= '<li><h5>' . $role_name . '</h5><ul>';
-            foreach ($filenames as $filename) {
-                $ret .= '<li>' . $this->link(
-                        str_replace('/roles/' . $role_name . '/', '', $filename),
-                        $this->convertFilenameToDocFilename($filename)) . '</li>';
-            }
-            $ret .= '</ul>';
-        }
-        $ret .= '</ul></div>';
+        $ret .= $this->renderContentsRoles($roles);
 
-        $ret .= '<div class="vars"><h4>Variables</h4><ul>';
-        foreach ($vars as $var_type => $var_files) {
-            $ret .= '<li><h5>' . $var_type . '</h5><ul>';
-            foreach ($var_files as $filename) {
-                $ret .= '<li>' . $this->link(
-                        str_replace('/' . $var_type . '/', '', $filename),
-                        $this->convertFilenameToDocFilename($filename)) . '</li>';
-            }
-            $ret .= '</ul>';
-        }
-        $ret .= '</ul></div>';
+        $ret .= $this->renderContentsVars($vars);
 
 
         return $ret;
@@ -369,6 +348,61 @@ TAGTEMPLATE;
      */
     protected function convertFilenameToDocFilename ($filename) {
         return substr(str_replace(DIRECTORY_SEPARATOR, '_', $filename), 1) . '.html';
+    }
+
+    /**
+     * @param $plays
+     *
+     * @return string
+     */
+    protected function renderContentsPlays ($plays) {
+        $ret = '<div class="plays"><h4>Plays</h4><ul>';
+        foreach ($plays as $playname) {
+            $ret .= '<li>' . $this->link($playname, $this->convertFilenameToDocFilename('/' . $playname . '.yml'));
+        }
+        $ret .= '</ul></div>';
+        return $ret;
+    }
+
+    /**
+     * @param $roles
+     *
+     * @return string
+     */
+    protected function renderContentsRoles (array $roles) {
+
+        $ret = '<div class="roles"><h4>Roles</h4><ul>';
+        foreach ($roles as $role_name => $filenames) {
+            $ret .= '<li><h5>' . $role_name . '</h5><ul>';
+            foreach ($filenames as $filename) {
+                $ret .= '<li>' . $this->link(
+                        str_replace('/roles/' . $role_name . '/', '', $filename),
+                        $this->convertFilenameToDocFilename($filename)) . '</li>';
+            }
+            $ret .= '</ul>';
+        }
+        $ret .= '</ul></div>';
+        return $ret;
+    }
+
+    /**
+     * @param $vars
+     *
+     * @return string
+     */
+    protected function renderContentsVars ($vars) {
+        $ret = '<div class="vars"><h4>Variables</h4><ul>';
+        foreach ($vars as $var_type => $var_files) {
+            $ret .= '<li><h5>' . $var_type . '</h5><ul>';
+            foreach ($var_files as $filename) {
+                $ret .= '<li>' . $this->link(
+                        str_replace('/' . $var_type . '/', '', $filename),
+                        $this->convertFilenameToDocFilename($filename)) . '</li>';
+            }
+            $ret .= '</ul>';
+        }
+        $ret .= '</ul></div>';
+        return $ret;
     }
 
 }
