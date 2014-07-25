@@ -5,8 +5,8 @@
  * Time: 13:53
  */
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../AnsibleDoc/Parser.php';
-require_once __DIR__ . '/../AnsibleDoc/DocBlock.php';
+require_once __DIR__ . '/../PlaybookDoc/Parser.php';
+require_once __DIR__ . '/../PlaybookDoc/DocBlock.php';
 
 
 class DocBlockTest extends PHPUnit_Framework_TestCase {
@@ -16,7 +16,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
 
         $text = 'abcc';
 
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
         $doc->parseLine($text);
 
         $this->assertEquals($text, $doc->getShortDescription());
@@ -25,7 +25,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
 
     public function test_the_second_line_sets_the_long_description () {
 
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
 
         $doc->parseLine('a');
 
@@ -37,7 +37,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
 
     public function test_a_two_line_long_desc_gets_parsed () {
 
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
 
         $doc->parseLine('a');
 
@@ -54,7 +54,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
 
     public function test_we_can_get_a_tag () {
 
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
         $text = '@author Matt';
         $doc->parseLine($text);
 
@@ -64,7 +64,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
 
     public function test_we_can_get_two_tags_with_same_name () {
 
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
         $text = '@author Matt';
         $doc->parseLine($text);
         $text = '@author Jen';
@@ -75,7 +75,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_we_can_parse_multi_line_tags () {
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
         $text = '@author Matt';
         $doc->parseLine($text);
         $text2 = 'Lives in London';
@@ -85,7 +85,7 @@ class DocBlockTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_we_can_get_tags_used () {
-        $doc = new AnsibleDoc\DocBlock();
+        $doc = new PlaybookDoc\DocBlock();
         $text = '@author Matt';
         $doc->parseLine($text);
         $text = '@author Jen';

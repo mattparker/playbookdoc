@@ -5,8 +5,8 @@
  * Time: 12:20
  */
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../AnsibleDoc/Parser.php';
-require_once __DIR__ . '/../AnsibleDoc/DocBlock.php';
+require_once __DIR__ . '/../PlaybookDoc/Parser.php';
+require_once __DIR__ . '/../PlaybookDoc/DocBlock.php';
 
 
 class ParserTest extends PHPUnit_Framework_TestCase {
@@ -19,7 +19,7 @@ class ParserTest extends PHPUnit_Framework_TestCase {
 # just a comment
 BLOCK;
 
-        $parser = new AnsibleDoc\Parser();
+        $parser = new PlaybookDoc\Parser();
         $blocks = $parser->parse($test);
 
         $this->assertEquals(0, count($blocks));
@@ -36,12 +36,12 @@ BLOCK;
 ###
 BLOCK;
 
-        $parser = new AnsibleDoc\Parser();
+        $parser = new PlaybookDoc\Parser();
         $blocks = $parser->parse($test);
 
         $this->assertEquals(1, count($blocks));
         $block0 = $blocks[0];
-        $this->assertInstanceOf('AnsibleDoc\DocBlock', $block0);
+        $this->assertInstanceOf('PlaybookDoc\DocBlock', $block0);
         $this->assertEquals('Main description', $block0->getShortDescription());
     }
 
@@ -60,7 +60,7 @@ BLOCK;
 ###
 BLOCK;
 
-        $parser = new AnsibleDoc\Parser();
+        $parser = new PlaybookDoc\Parser();
         $blocks = $parser->parse($test);
 
         $this->assertEquals(2, count($blocks));
@@ -77,12 +77,12 @@ BLOCK;
 ###
 BLOCK;
 
-        $parser = new AnsibleDoc\Parser();
+        $parser = new PlaybookDoc\Parser();
         $blocks = $parser->parse($test);
 
         $this->assertEquals(1, count($blocks));
         $block0 = $blocks[0];
-        $this->assertInstanceOf('AnsibleDoc\DocBlock', $block0);
+        $this->assertInstanceOf('PlaybookDoc\DocBlock', $block0);
         $this->assertEquals('The short description', $block0->getShortDescription());
     }
 
@@ -138,7 +138,7 @@ BLOCK;
 BLOCK;
 
 
-        $parser = new AnsibleDoc\Parser();
+        $parser = new PlaybookDoc\Parser();
         $blocks = $parser->parse($text);
 
         $this->assertEquals(3, count($blocks));

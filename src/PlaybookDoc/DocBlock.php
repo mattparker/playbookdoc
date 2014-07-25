@@ -10,7 +10,7 @@
  *
  */
 
-namespace AnsibleDoc;
+namespace PlaybookDoc;
 
 
 /**
@@ -18,7 +18,7 @@ namespace AnsibleDoc;
  *
  * Represents a single docblock found in a file
  *
- * @package AnsibleDoc
+ * @package PlaybookDoc
  */
 class DocBlock {
 

@@ -21,7 +21,7 @@ Then, from within the directory where your playbooks and stuff are, create a doc
 
 ```bash
 
-$ /path/to/ansibledocrepo/ansibledoc.php
+$ /path/to/playbookdocrepo/playbookdoc.php
 ```
 
 and it'll put a bunch of html files there.  You can specify input directory using the `-i` option and the output
@@ -93,7 +93,7 @@ this do let me know.
 It'd be nice to actually parse the yml between docblocks in a file and look for includes, roles, tags etc
 and automatically add @tags and links, so your docblocks would only need to be commentary about what's actually happening.
 
-Obviously the styling etc is extremely rudimentary and could probably benefit from a little attention at some point.
+Obviously the styling etc is somewhat rudimentary and could probably benefit from a little attention at some point.
 
 I'd also like to write an MarkdownOutput writer, with the main aim that docs in github would render nicely.
 

@@ -10,7 +10,7 @@
  *
  */
 
-namespace AnsibleDoc;
+namespace PlaybookDoc;
 
 
 /**
@@ -18,7 +18,7 @@ namespace AnsibleDoc;
  *
  * Generates a series of html files from the parsed docblocks of .yml files.
  *
- * @package AnsibleDoc
+ * @package PlaybookDoc
  */
 class HtmlOutput {
 

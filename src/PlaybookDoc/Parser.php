@@ -11,7 +11,7 @@
  */
 
 
-namespace AnsibleDoc;
+namespace PlaybookDoc;
 
 
 /**
@@ -19,7 +19,7 @@ namespace AnsibleDoc;
  *
  * Parses text for docblocks in yml files.
  *
- * @package AnsibleDoc
+ * @package PlaybookDoc
  */
 class Parser {
 
@@ -99,7 +99,7 @@ class Parser {
 
     /**
      * Takes the text lines found in the block and parses it into
-     * a AnsibleDoc\DocBlock
+     * a PlaybookDoc\DocBlock
      * @param array $textlines
      *
      * @return DocBlock

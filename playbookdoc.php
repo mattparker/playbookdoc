@@ -11,8 +11,8 @@
  *
  */
 
-require_once __DIR__ . '/src/AnsibleDoc/Parser.php';
-require_once __DIR__ . '/src/AnsibleDoc/HtmlOutput.php';
+require_once __DIR__ . '/src/PlaybookDoc/Parser.php';
+require_once __DIR__ . '/src/PlaybookDoc/HtmlOutput.php';
 
 // options
 
@@ -36,12 +36,12 @@ $rec_iterator = new RecursiveIteratorIterator($dir);
 $file_list = new RegexIterator($rec_iterator, '/^.+\.yml$/i', RecursiveRegexIterator::GET_MATCH);
 
 // setup the output
-$out = new AnsibleDoc\HtmlOutput($options['o']);
+$out = new PlaybookDoc\HtmlOutput($options['o']);
 
 // parse each file for docblocks
 foreach ($file_list as $name => $file_ob) {
 
-    $parser = new AnsibleDoc\Parser();
+    $parser = new PlaybookDoc\Parser();
     $name_from_here = str_replace($options['i'], '', $name);
     $out->addFileResults($name_from_here, $parser->parse(file_get_contents($name)));
 
